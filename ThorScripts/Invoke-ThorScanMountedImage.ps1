@@ -39,39 +39,39 @@ $Thor = Get-ChildItem -Recurse -Path $PSScriptRoot -Include 'thor64.exe'
 
 if ($Thor -eq $null)
 {
-	Write-Host "Error: thor64.exe not found in the current directory or its subdirectories"
+	Write-Host (Get-Date).ToString("yyyy/MM/dd HH:mm:ss") "| Error: thor64.exe not found in the current directory or its subdirectories"
 	exit 1
 }
 else
 {
-	Write-Host "Located thor64.exe at $Thor"
+	Write-Host (Get-Date).ToString("yyyy/MM/dd HH:mm:ss") "| Located thor64.exe at $Thor"
 }
 
 $outputPathThor = Join-Path -Path $OutputPath -ChildPath 'Thor' # C:\temp\test\Thor
 
 if (-not (Test-Path $outputPathThor))
 {
-	Write-Host "Creating $outputPathThor"
+	Write-Host (Get-Date).ToString("yyyy/MM/dd HH:mm:ss") "| Creating $outputPathThor"
 	New-Item -ItemType Directory -Path $outputPathThor -Force | Out-Null
 }
 else
 {
-	Write-Host "$outputPathThor already exists"
+	Write-Host (Get-Date).ToString("yyyy/MM/dd HH:mm:ss") "| $outputPathThor already exists"
 }
 
 $args = "--lab -p $DriveLetter --virtual-map $DriveLetterVirtualMapping -e $outputPathThor"
 $thorConfigYamlFilename = '.\Thor\config\thor.yml'
 
 Start-Process -FilePath $Thor -ArgumentList $args
-Write-Host "Executing $Thor with the following arguments: $args"
-Write-Host "Please check the Thor config file located at: $thorConfigYamlFilename"
-Write-Host "This is important because the max_file_size value is likely set for 5GB, so if you need larger than that, please modify the value prior to scanning"
+Write-Host (Get-Date).ToString("yyyy/MM/dd HH:mm:ss") "| Executing $Thor with the following arguments: $args"
+Write-Host (Get-Date).ToString("yyyy/MM/dd HH:mm:ss") "| Please check the Thor config file located at: $thorConfigYamlFilename"
+Write-Host (Get-Date).ToString("yyyy/MM/dd HH:mm:ss") "| This is important because the max_file_size value is likely set for 5GB, so if you need larger than that, please modify the value prior to scanning"
 
 # SIG # Begin signature block
 # MIIvngYJKoZIhvcNAQcCoIIvjzCCL4sCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDvMPudJSx7bM9p
-# 7dRfk2DspANb9+r7fmDXNlWi0Xvm1KCCKKMwggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAZU+gp5OP6SAkv
+# LxgqccAwQnXREDzAdMVWy8yk4gk5VKCCKKMwggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -291,36 +291,36 @@ Write-Host "This is important because the max_file_size value is likely set for 
 # 9lAXRaV/0x/qHtrv6DGCBlEwggZNAgEBMGgwVDELMAkGA1UEBhMCR0IxGDAWBgNV
 # BAoTD1NlY3RpZ28gTGltaXRlZDErMCkGA1UEAxMiU2VjdGlnbyBQdWJsaWMgQ29k
 # ZSBTaWduaW5nIENBIFIzNgIQNZ6LJbr/UQt8TtHttsJpJDANBglghkgBZQMEAgEF
-# AKBMMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMC8GCSqGSIb3DQEJBDEiBCC3
-# nxvTJU+C2beJ/7wDPmwYLAIsuAFROstpOR8HI2i98DANBgkqhkiG9w0BAQEFAASC
-# AgCsWKotvjOhR6VOTs/IxZe7CNC8shsLhPq2XFB5hDa8uz9N80GPGqf0cuTIBrK3
-# vJ2c6jEy8gr71MCvv8AABOQ+xznkUwjit0CEe5kyAf4vTrsuFBYvB6gbqc3SKEJb
-# ANzMfhVej1NbxV6F61QEIYSWfSMGFqXotPzELjfwOafdVgIBH6YnNbF+vtR0d+JO
-# B89AJYtqfuvEV3m32+IuDnhzCq8tkjAvtvjWz0HgHTERZqWyzcv6hwuneGHFTLR6
-# LwW+iV8mz1cYKyY/EBvCRb/X0Tz9TiiMozSRWIFTRRcXYt/MoNGZ6Ow+qS0fH6Xt
-# tjheWIvyV+XL/JKaylJeGmAxUnAseJHL5gb0v6WiBlGsnKLj1auQ13znU0mkjAXW
-# xCywlOsnQIsjPsldasZign1Mw+8HK7aydr/bk+ECIKHzFocY6FXz9YE/jkEdapsH
-# aD3HyzsINOxYgWyiU8vxvapbrvx1is9kZvlNfebtFqhSfiYVxjIcOyHVGS2nR8iL
-# X4xDxIObIYA2lB2wouFWGBq8l3vtqrJDa7hqKSIfXO1EPC6w0M/w6PhZZRG79qxf
-# KjfG3JEP7uA3pVgkQITXWLAPK55H27MOO8uP8PdmV88oQn8DLmxRyaUs+hlFZVy1
-# yudG5asU3YMOtvRd2RkcQPPW0fE2XkrSArp6cYphjbk2eaGCA2wwggNoBgkqhkiG
+# AKBMMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMC8GCSqGSIb3DQEJBDEiBCBU
+# 1rKbUNvIqKWtqmb4tQvV0PRPi5CZyQCBYL2YW0v6RzANBgkqhkiG9w0BAQEFAASC
+# AgCMwBgEgjISFY9PEhOQwzYpzGFiRpcndVnZmxfmBXGC0lY9lLVbaa01Ltty+Z1L
+# K0kzL7NurS6LmMnpma1oTSJ0j64qouztBCGGBk8AyhXdmNCSo+EqCtS2L6WoA52u
+# g7lY+WPlZxBOwVW9oFRE0iVG2oGYujxdkHk16rHTlTRrl6UcjoC1vWmMcV67X5YC
+# pZpSRtgg1FQYb4HFpbyugXoL65HXmJrqTo2nmUv/B8sGONCAoC3QqLteHf4WIlpr
+# J3kVR4EklLOOxaDmGN42FhFLn7jCbUd8Ut8Vsn5xMKPCaWkViy1iiZBMqrxIqy1E
+# UN9l8sg0X8XUvSXwssdCcvc+U3NZNenmbE+km19t3vTYErO73Mw7bA3NvDAbTZc/
+# qjhQyWl5ybJ93zywH1fVztDhU2LL2UuXgEJLQoL8gwTrljbbT1XD/cB7ECW61KXy
+# uhSqmzlESOLv9VErKNUKyiBrWC52CJzTUO3qwK4skS1s/JjdRoacxPim1HGgoXiW
+# ptXLmtIL3wtAAPQRgggF8aH1LBQPuH1o5hh+blKd4qb922Obxkc/PC8HpKQ6yMlo
+# Fiwulh4dBE+EFxoY9lC7CTTBD+wZQgJy67txPFXyaMm0mrfysb9SoIcm/W3G6c6z
+# 6COsJ7u1qM2qNbFkhniKHtZg8DsS46/Qm4gw13OnRbgb/6GCA2wwggNoBgkqhkiG
 # 9w0BCQYxggNZMIIDVQIBATBvMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
 # YWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIFRpbWVzdGFtcGluZyBD
 # QSAtIFNIQTM4NCAtIEc0AhABB2SbCLCn/n3WVKjy9Cn2MAsGCWCGSAFlAwQCAaCC
 # AT0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
-# OTA0MTYyMzM1WjArBgkqhkiG9w0BCTQxHjAcMAsGCWCGSAFlAwQCAaENBgkqhkiG
-# 9w0BAQsFADAvBgkqhkiG9w0BCQQxIgQgU4SVzZtfy3kaodDWKsLX8CEKqJDpWMX2
-# 6io+jD7eKMcwgaQGCyqGSIb3DQEJEAIMMYGUMIGRMIGOMIGLBBRE05OczRuIf4Z6
+# OTA0MTYyNzU1WjArBgkqhkiG9w0BCTQxHjAcMAsGCWCGSAFlAwQCAaENBgkqhkiG
+# 9w0BAQsFADAvBgkqhkiG9w0BCQQxIgQgu8Er6ANE4X9GIM/3/41/+rr+FSrYKEMm
+# kU9LpI/5kogwgaQGCyqGSIb3DQEJEAIMMYGUMIGRMIGOMIGLBBRE05OczRuIf4Z6
 # zNqB7K8PZfzSWTBzMF+kXTBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFs
 # U2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBUaW1lc3RhbXBpbmcgQ0Eg
 # LSBTSEEzODQgLSBHNAIQAQdkmwiwp/591lSo8vQp9jANBgkqhkiG9w0BAQsFAASC
-# AYCL5Sh5mOE35A2kqXquxGSMtFb1Eg5mjgLXE9fV4z2O7OC4Frljn+Pfmpmw+mD1
-# DRRUKwXy+Piy45X75luaxi9wYSAb0LelP6yZIPOgviF94MxunzZto5SJocn9OArF
-# UJTr0t7J0Cb/aAc2q0YPkLu6vcc5qYSrXPUhs6k0pf0P+LSwsSbbC/0euu3PVAGb
-# yy6pWui98xWCq9jpSodyiFKoXmpRWvFmOYrTZ+D5bEjknlbZUHU0ZazrfBM8Mefh
-# TCQiGsLRvNyS16NaynWJ4vx4cHodkAeUVuH0LZ7OONmoHA61sE/YS/LPnrhGdt5H
-# wrWSka1D0MLCSEcuTgfLCw+B6ZNeti9WQp94A3qguwBirv1PVku+Uf+J7m2gRSpN
-# 5753F5LyUPNNpeDLuew2JH3FiMFS5LmEM6DK72LQEckz6wEiYAyj2cRU+g9w1NLk
-# 2MMI29dvSArcUJmlQ71rE+kbbi7ykmE8i02AMBOrlRsqwdu8WSHUlwP06A4F40JJ
-# iFs=
+# AYC2TBJQr86IEDjJVGkw5SrEF0BsL95A3PsgRPOqJxuq+2L//6EP98uSI+QSSVn0
+# SB98vQWzHwTAj5jV8TUdJ1muRY6mCX5wZXA0Mi6hAEMICBs/Iz6BffBrVNoRQ17W
+# xewgF2kDTIW4z0RY9UiIB01VXzbOtpN/NMxSNWE3g15MDLdGIW8PNntmHa5h6x3T
+# j8D+xIMLW6DnUv276yX6OCtl5RIo7dp/cwic9TIu8pGG6A5o1mJ2GwX5pS/3zI1N
+# ZbHc5iHLD8eMXV7ib1lJOLddidCm0e2w2nXmewmVxm9pB9S5HUBlcBAtHP3GJLPE
+# lrraY2PX8/67dhToO9Y94HyxVgCg6Uf2S9apuL6l+ghyxNI7ofrVZdZobW19HQWR
+# foBtVPS1mpC26KWK256dV0HEMJ1oa1qjoEVMhuI1wnAVZmAiv+YEf6ahnzlL+5GU
+# LBJERK1F/fMf9cCHVumvG/OZfw705z0Z6yd8GCLUGyJdmg5MSyc/28cTOtHuqZ+B
+# DwE=
 # SIG # End signature block
