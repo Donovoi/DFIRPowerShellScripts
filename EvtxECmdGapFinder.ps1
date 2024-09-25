@@ -23,8 +23,31 @@ param
 )
 
 # Function to parse datetime and handle potential errors
-function Parse-DateTime($dateString)
+<#
+	.SYNOPSIS
+		A brief description of the Parse-DateTime function.
+	
+	.DESCRIPTION
+		A detailed description of the Parse-DateTime function.
+	
+	.PARAMETER dateString
+		A description of the dateString parameter.
+	
+	.EXAMPLE
+		PS C:\> Parse-DateTime -dateString $dateString
+	
+	.NOTES
+		Additional information about the function.
+#>
+function Parse-DateTime
 {
+	param
+	(
+		[Parameter(Mandatory = $true,
+				   Position = 1)]
+		$dateString
+	)
+	
 	try
 	{
 		return [datetime]::ParseExact($dateString, "yyyy-MM-dd HH:mm:ss.fffffff", [System.Globalization.CultureInfo]::InvariantCulture)
@@ -37,8 +60,37 @@ function Parse-DateTime($dateString)
 }
 
 # Function to process a single CSV file
-function Process-CsvFile($csvPath, $gapThreshold)
+<#
+	.SYNOPSIS
+		A brief description of the Process-CsvFile function.
+	
+	.DESCRIPTION
+		A detailed description of the Process-CsvFile function.
+	
+	.PARAMETER csvPath
+		A description of the csvPath parameter.
+	
+	.PARAMETER gapThreshold
+		A description of the gapThreshold parameter.
+	
+	.EXAMPLE
+		PS C:\> Process-CsvFile -csvPath 'value1' -gapThreshold 'value2'
+	
+	.NOTES
+		Additional information about the function.
+#>
+function Process-CsvFile
 {
+	param
+	(
+		[Parameter(Mandatory = $true,
+				   Position = 1)]
+		[string]$csvPath,
+		[Parameter(Mandatory = $true,
+				   Position = 2)]
+		[int]$gapThreshold
+	)
+	
 	# Read CSV file and sort by TimeCreated
 	$events = Import-Csv -Path $csvPath |
 	Where-Object { $_.TimeCreated -ne $null -and $_.TimeCreated -ne '' } |
@@ -87,7 +139,7 @@ function Process-CsvFile($csvPath, $gapThreshold)
 }
 
 # Get all CSV files matching the pattern
-$csvFiles = Get-ChildItem -Path $Path -Filter "*_EvtxECmd_Output.csv"
+$csvFiles = Get-ChildItem -Recurse -Path $Path -Filter "*_EvtxECmd_Output.csv"
 
 foreach ($csvFile in $csvFiles)
 {
@@ -118,8 +170,8 @@ foreach ($csvFile in $csvFiles)
 # SIG # Begin signature block
 # MIIvngYJKoZIhvcNAQcCoIIvjzCCL4sCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCB/yZwG1Fc/Zo58
-# iMk6Hew7Eq9NL/jNDLynTi2qapKhaKCCKKMwggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBbDXoTTPdvm6KX
+# lpJ/k9Jj9fVuXFtZEXbrpGxO63SzUaCCKKMwggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -339,36 +391,36 @@ foreach ($csvFile in $csvFiles)
 # 9lAXRaV/0x/qHtrv6DGCBlEwggZNAgEBMGgwVDELMAkGA1UEBhMCR0IxGDAWBgNV
 # BAoTD1NlY3RpZ28gTGltaXRlZDErMCkGA1UEAxMiU2VjdGlnbyBQdWJsaWMgQ29k
 # ZSBTaWduaW5nIENBIFIzNgIQNZ6LJbr/UQt8TtHttsJpJDANBglghkgBZQMEAgEF
-# AKBMMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMC8GCSqGSIb3DQEJBDEiBCAO
-# GNsPhUX+zDiJ09tLs23oZ3uBCqnUQdEvO3IhQpDNYDANBgkqhkiG9w0BAQEFAASC
-# AgBGhizi9OrUH24/xIYV4hmHH7/T/Rq39N0/+6Q2DmcW7NMTyck5107vyHnkbXKA
-# SfzoIaP9t7Z2ud2hxBBRxSvTZl90qmPozOTRf93WWIwtl0UiE9GcY7nF2gZ70bPc
-# Ygyqf5iLL56qCAofRqJlq3ojuSPvx+3zNB5upS2RumBCOCNp3GkQoKVcaIfdfipG
-# yhzhaT84vOg06h974hjn139iWrZ6/hE/Zx0NzhEAjh4hqM3yCbyBTEpoOfqY/5Kf
-# MTFDG/ni1Tsrqj9Emx/hZRw2LRNMG2L1sTohrgsvZkCVBrjfVJVAnlvubQMuo19q
-# b4dR3pZgoltE9DIxwPSheTQE/SRyNih3jB/ZEWpzIS+D45dteAaLLTMPKev1a/ZP
-# IrvxRMCNVSUYSzR9XpJ0HLVNwByedbWUgSkHq7QRrOzTyUlfdJ5YIDGQbk0SokQP
-# My01xWcvI/q/1QOXO2FDloUQvfe3ZTN7s1C+ho110o/aD0/68ZvApP+R2qCifE6m
-# sGUni8SXZhxkzMLI+5SMD5eFnH109HiKKvqdtFSQmEYYHVP/O8CEd0TVqgTDtaC/
-# oVUmHoVj2v6508JdcKg3cD8BjIKRNL23khtBirUqKSRwk+tUkbZK6UwUmGgxPwWB
-# 4rA+nSOLJ1glMagy4RqbMInysyRGttq82Uq8rlKd0WQ8YaGCA2wwggNoBgkqhkiG
+# AKBMMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMC8GCSqGSIb3DQEJBDEiBCDK
+# 5yXIUs7jhybN8F9CSiuu94EYHfpsj+vl30x++vwhzjANBgkqhkiG9w0BAQEFAASC
+# AgBcYWmX9CIETTX21WH+jrmaGRk0MPoNI+/KOBjhywambzZebZxNt+SNDGlihB7U
+# Q7cz2n2wSuwDckXvpCB4palJfdT8XRawNj3vMc/zJPqamToxoRCOeOf1WxdP/Q5B
+# AZNEhYf0oOcvIeMLOIggDnMQiEtFtrNpT3ELpoztwRQN9MzpHQwu6TQpyvA5neQ5
+# 6q1vwwpDdFctzsIUpXRBLLD/wkLQp2isU4ppJEA3AQ6UmZHzwuFQ1FIZro06t4Qq
+# yVs4+SGJBkNLUa/HA3IdLexBfFFL4MDK8aAlsSXbnSl1tinzaBED95CrZ7XNFDzu
+# ShLZKpCS2jGnmZfH+iqzIG4oiX9FCnU063wtJIQt5GR+cgVDe0nplaL4uhaHotri
+# IvY4Glz+pw9aoSY+xOo5bzHpN1WLtiCWJ7LbodozJ3nkVdrl+eaTRwiJrAanEmg/
+# 5ajZ0tlgQDvQUPi0eqCC9ToUfAz9Isbj2RQy2ObHApdc4cmSEjYpYBHCeGb5lnMb
+# 8Asn15QWeMGA/xMbJeETHPEP91m53TA/94pNeo11igbCoi2iOzTEdeFWUxMp9wpI
+# b3fwA7KLiNOuBttN/TYAWL//N/Jku3tRoPOAcjytL8vcNdaSeeQ3PtORBquJJVyh
+# UXz4IxoNvxi3bDs+FxMzGqNbeo4QzKeTVsgnjc9D0SPPt6GCA2wwggNoBgkqhkiG
 # 9w0BCQYxggNZMIIDVQIBATBvMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
 # YWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIFRpbWVzdGFtcGluZyBD
 # QSAtIFNIQTM4NCAtIEc0AhABB2SbCLCn/n3WVKjy9Cn2MAsGCWCGSAFlAwQCAaCC
 # AT0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
-# NzI2MDMwMDA0WjArBgkqhkiG9w0BCTQxHjAcMAsGCWCGSAFlAwQCAaENBgkqhkiG
-# 9w0BAQsFADAvBgkqhkiG9w0BCQQxIgQg2Qsict3neLfRi3XMyZ8vtofoiYPy+kYz
-# 3JbSh56x8MgwgaQGCyqGSIb3DQEJEAIMMYGUMIGRMIGOMIGLBBRE05OczRuIf4Z6
+# OTI1MTk1NDA5WjArBgkqhkiG9w0BCTQxHjAcMAsGCWCGSAFlAwQCAaENBgkqhkiG
+# 9w0BAQsFADAvBgkqhkiG9w0BCQQxIgQgf85xGCr9YdeRjLHySe2rXd1ULCwArVxX
+# ltnQ1OoMWVUwgaQGCyqGSIb3DQEJEAIMMYGUMIGRMIGOMIGLBBRE05OczRuIf4Z6
 # zNqB7K8PZfzSWTBzMF+kXTBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFs
 # U2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBUaW1lc3RhbXBpbmcgQ0Eg
 # LSBTSEEzODQgLSBHNAIQAQdkmwiwp/591lSo8vQp9jANBgkqhkiG9w0BAQsFAASC
-# AYCs5fDpDOLJaOzc+P1EQDLPAtQ995/l5xqG9R6DcdOV72Mq7w0BUWVCPApWo9e9
-# XG/9V+gg9gqrVtul5Tvb2t4hvJgI5/aRuSFqaZO3sGSb5vOMIjmCjq26ZdN6vmNP
-# cQ8ubGL8Pnn4v+Vy4de9Ot150d5D5Mzf6q7hdDYdzykD90IgJWkAxoDgOeExyG5C
-# cl3THG3MG+xYyvGw6MfFp/QZ1KMBfN1o4+IiR60wQ1gET0WSC0Lnu38TgO6yrj7J
-# xE4akHTJ8VXSmsfY0F+h9e0Gxb2dO3STaV833uXj24Br7CXjgUnXYkNHd4bOZvT5
-# aJBvJe8BCNCkIlfIhMb83z/hC1J8+6zHNNGCE56bjf6zwbvtZ7iXd0UkhfF7hiwA
-# i7SmWewiMR+E8wHwMnzRMCfnScGqCbY3XgityWsuX6JJ9WDqqBlKZfSrJJrrIDco
-# LzSePVwiCQr7kgWV/G2/YDB9fBM62Pxr20r8zherjfh9da1elobrsVh3Pg6hpC4A
-# pAM=
+# AYArPAxYuY9/538yqQbsNRM68XsqxskVi3KvNnvcLdioqDj5H82YIR71zViZTHZ6
+# nhmNHR8zViH9d1gen9LTgLAljqFzzCnrppP4/59/Hk21FWISKDc5InqAQgHnxbtO
+# t+pqEzwe9BbLbjHpFZ4CvBjjZAUnE9lpmy/DxjDti3mVCUU80hvCp/FfRU5YnNlA
+# uvTWcLWi33JjOeJkNhk52e8JQQU2h2oDKq0ARJH5t9GFVLEiY5gy4dWun3gZleux
+# NlVLt3peMcuGYHnUVQa69rJelUg6b3TI4I2ewGxWa4i3fIuzuVgdDXPXdqbaeKHI
+# rPYkPqVOj3M+EB+JYSQsMbSUQSMC+OVXCZMSzng3iKeD7jNMHGMC7DO9LJbmQqNP
+# GABTfKKwzo9zhj4O9ynhWk2CKP7uVmeoh0aAUMCbHqBqu34Eyj6tQfajng1oJ6C6
+# 3wV3qm1IcWBNU7ZoTOHlbTaYtIc3NWgBRr8ddQ4aI+Db8wEOaeIRAT2CUA2yosXj
+# zv8=
 # SIG # End signature block
