@@ -3,15 +3,16 @@
 		Updates the Sigma Rules for use with Chainsaw!
 
 	.DESCRIPTION
-		This script was made for the purpose of use with KAPE. It's meant to be placed into .\KAPE\Modules\bin and called upon using the associated KAPE Module. However, one could use this simply by ensuring your Chainsaw folder is at the root of where the script is executed. There are no parameters with this script currently.
+		This script was originally made for the purpose of use with KAPE. However, this version can be easily used outside of KAPE. Simply place it in the same folder as where your Chainsaw binary is!
 
 	.CHANGELOG
 		2022-08-23 - Updated for Chainsaw V2 where Sigma rules folder moved to .\chainsaw\sigma
+		2024-09-25 - Created a version of this made for using outside of KAPE
 
 	.NOTES
 		===========================================================================
 		Created with: 	SAPIEN Technologies, Inc., PowerShell Studio 2022 v5.8.201
-		Created on:   	2022-02-23 16:17
+		Created on:   	2024-09-25 16:17
 		Created by:   	Andrew Rathbun
 		===========================================================================
 #>
@@ -20,7 +21,7 @@ Set-ExecutionPolicy Bypass -Scope Process
 
 $PSScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $sigmaRulesGitHubDestination = Join-Path $PSScriptRoot "sigma"
-$oldSigmaRulesPath = Join-Path $PSScriptRoot "sigma" # More descriptive name
+$oldSigmaRulesPath = Join-Path $PSScriptRoot "sigma"
 $sigmaRulesGitHubUrl = "https://github.com/SigmaHQ/sigma/archive/refs/heads/master.zip"
 $sigmaRulesGitHubZip = Join-Path $PSScriptRoot "sigma-master.zip"
 $sigmaRulesGitHubTargetFolder = Join-Path $PSScriptRoot "sigma-master\rules"
@@ -46,7 +47,6 @@ function Get-SigmaRules
 	[CmdletBinding()]
 	param ()
 	
-	$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 	Write-Log "Downloading Sigma Rules from $sigmaRulesGitHubUrl to $sigmaRulesGitHubZip"
 	Invoke-WebRequest -Uri $sigmaRulesGitHubUrl -OutFile $sigmaRulesGitHubZip -ErrorAction Stop
 }
@@ -60,7 +60,6 @@ function Expand-SigmaRules
 	[CmdletBinding()]
 	param ()
 	
-	$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 	Write-Log "Extracting $sigmaRulesGitHubZip to $PSScriptRoot"
 	Expand-Archive -Path $sigmaRulesGitHubZip -DestinationPath $PSScriptRoot -Force -ErrorAction Stop
 }
@@ -74,7 +73,6 @@ function Remove-OldSigmaRules
 	[CmdletBinding()]
 	param ()
 	
-	$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 	Write-Log "Removing preexisting Sigma Rules from $oldSigmaRulesPath"
 	Remove-Item -Path $oldSigmaRulesPath -Recurse -Force -ErrorAction Stop
 }
@@ -87,7 +85,6 @@ function Move-SigmaRules
 {
 	[CmdletBinding()]
 	param ()
-	$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 	Write-Log "Moving $sigmaRulesGitHubTargetFolder to $sigmaRulesGitHubDestination"
 	Move-Item -Path $sigmaRulesGitHubTargetFolder -Destination $sigmaRulesGitHubDestination -Force -ErrorAction Stop
 }
@@ -101,23 +98,22 @@ function Remove-SigmaRulesDownload
 	[CmdletBinding()]
 	param ()
 	
-	$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 	Write-Log "Removing instances of files downloaded from $PSScriptRoot"
 	Remove-Item -Path $sigmaRulesGitHubZip -Force -ErrorAction Stop
 	Remove-Item -Path (Join-Path $PSScriptRoot "sigma-master") -Recurse -Force -ErrorAction Stop
 }
 
-& Get-SigmaRules
-& Expand-SigmaRules
-& Remove-OldSigmaRules
-& Move-SigmaRules
-& Remove-SigmaRulesDownload
+Get-SigmaRules
+Expand-SigmaRules
+Remove-OldSigmaRules
+Move-SigmaRules
+Remove-SigmaRulesDownload
 
 # SIG # Begin signature block
 # MIIvngYJKoZIhvcNAQcCoIIvjzCCL4sCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAMZ5nEJ+br74Dz
-# njuK8PopFrZvJwhSuYQkNzyepXhfQ6CCKKMwggQyMIIDGqADAgECAgEBMA0GCSqG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBYmPwDxiA2p4pr
+# 3WKbNMC91v6hsdo2+3GbSBrcoP3OCqCCKKMwggQyMIIDGqADAgECAgEBMA0GCSqG
 # SIb3DQEBBQUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQIDBJHcmVhdGVyIE1hbmNo
 # ZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoMEUNvbW9kbyBDQSBMaW1p
 # dGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2VydmljZXMwHhcNMDQwMTAx
@@ -337,36 +333,36 @@ function Remove-SigmaRulesDownload
 # 9lAXRaV/0x/qHtrv6DGCBlEwggZNAgEBMGgwVDELMAkGA1UEBhMCR0IxGDAWBgNV
 # BAoTD1NlY3RpZ28gTGltaXRlZDErMCkGA1UEAxMiU2VjdGlnbyBQdWJsaWMgQ29k
 # ZSBTaWduaW5nIENBIFIzNgIQNZ6LJbr/UQt8TtHttsJpJDANBglghkgBZQMEAgEF
-# AKBMMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMC8GCSqGSIb3DQEJBDEiBCDg
-# VuUr9NZADdkg5iPTu0ol8GjJvYrx3OcdUJagV06Q7DANBgkqhkiG9w0BAQEFAASC
-# AgAzDiJbF0hjmWBKcBzDKlM2+Jlc7aEpKv8lyoUq+pI0XsRlkvkgqUj6KEj9QLSD
-# zrBh1s1wxP3dhr/Xf5FCPsY37GkWhosMrTcUEr0ozc2g3Y1MUUp+sKPZNO3CgLzw
-# LZ6oAMydXvHb+8PFjXYNxxyQQDzWETtZnsJLldCvAtRXKXZZMdfLuZKR8e4t1QIS
-# u6jzHotkUxjtKWHU+lzoP8z9SoOqd2uBsXEKupDmrnA7R+XJo1tPjJz6FkJfEtdu
-# 4gObFOZb/WvOVk7MLlMnv6u5iJ8KsN1H6n7ThNBVe77QeQ+y7ED04u0Q/eVGimog
-# VEJhWNTh2uLf919VfZxsJfNNML0SI7DiNj3b/yrcnx+0NOJ7qVWxvbi/slObyG1M
-# h42zLHAh1QyfKckFjFfvC02x9rmw93vfcryMu40Ftq0XNDtJQyk4C+sux8OS1Abm
-# Ps3ipA1euhkdyNDXpAWGNBeiNeku9WfesctpRDKaz6YQvSOIXxbr6kyCwfdOlngD
-# wRn8UEhn2RFhTPWXmZMyOrZhZxY8ISd4UBtToOH0g4LrAsLJTaDdT1Ye124bYgP7
-# QwuJ8YPPgAkvO+7ii4iph33L/fk3iOVvehZ9pSFSTa5YPnUMG4nmu5BWsm3Zp3/d
-# O/BvGxVurIKOJVDgT+wbtE8+YCQdwAevZ8JvBGUELqbIa6GCA2wwggNoBgkqhkiG
+# AKBMMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMC8GCSqGSIb3DQEJBDEiBCD4
+# 5M+tUQtgvQTLWwAge15E1NyQmDL0JCC5jcv4bUZBpTANBgkqhkiG9w0BAQEFAASC
+# AgCLffR2FnrsfHhVQE0L89fTlhAkJDlAMqmhqrDZ3QCSF4zpDEkXhaZXOuSMvtYJ
+# M3eZx1oYFEKceLB2f/9BhXe1YgwZ+BwqKseeuszqUXWNYiuQkvtK2c1wQaWi7bnv
+# +toUQT3ltWWPJDbbLBWM7fBaPrIlydrtaAgYawP9kix4xMQ4nn5x7Gl8eV5+SywK
+# uhuRef9WMNT/pCu7lV6L3lG85zFauVo0AS/gh2mbjHGanu5qggV1qKSMjGx4ct5L
+# PR87eFOFFYGz0eXfO4A39ue9fnhyEhpcsVSpj36PzfHuvhBXp9iDlH5MzNmyTL2r
+# p6cpd9WJyXRZOZp92kQUulmlZacTOdUESPugHzUxj5nAwjQ55tXoXrE/YTvthYEM
+# 3jrlLfx5VWfvfgxUjLBl2UCIduMh0VXr5/SrlEtPbaOa7jJA5Jhm2TCu/G4vagLf
+# 9J0ujTUI5Nv8rIYOfVpiBIeMTmtyyLhP1t3hnZekPknKntZiyMbdYiD/eLtbjVo3
+# +N1U1TKlO/YGBw6CC4VqC/pQ/4OdBnJZ/KAfeE+m4iyh9IAJK45DYR+BkHpj1Rqw
+# 7badIh1186LFAnuJKgr/hmZ12eq8by51gJoRcTcFUDQM5L92KqbzeEIk6BahusrT
+# ZSejQFMdvQhDlRz2uWx4iLyWtogsE+GpPOQsOO6RWfbZtqGCA2wwggNoBgkqhkiG
 # 9w0BCQYxggNZMIIDVQIBATBvMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
 # YWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIFRpbWVzdGFtcGluZyBD
 # QSAtIFNIQTM4NCAtIEc0AhABB2SbCLCn/n3WVKjy9Cn2MAsGCWCGSAFlAwQCAaCC
 # AT0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
-# OTI2MDExODIyWjArBgkqhkiG9w0BCTQxHjAcMAsGCWCGSAFlAwQCAaENBgkqhkiG
-# 9w0BAQsFADAvBgkqhkiG9w0BCQQxIgQgdsXiocg/nxnxheIOjcMcB7r5yasDzBWE
-# T+oN5T14w+4wgaQGCyqGSIb3DQEJEAIMMYGUMIGRMIGOMIGLBBRE05OczRuIf4Z6
+# OTI2MDEzMjU2WjArBgkqhkiG9w0BCTQxHjAcMAsGCWCGSAFlAwQCAaENBgkqhkiG
+# 9w0BAQsFADAvBgkqhkiG9w0BCQQxIgQg3UVm5uFDd8Ejz0D1OVI+wVUJ1UIZAmuf
+# +icv3otwXpUwgaQGCyqGSIb3DQEJEAIMMYGUMIGRMIGOMIGLBBRE05OczRuIf4Z6
 # zNqB7K8PZfzSWTBzMF+kXTBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFs
 # U2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBUaW1lc3RhbXBpbmcgQ0Eg
 # LSBTSEEzODQgLSBHNAIQAQdkmwiwp/591lSo8vQp9jANBgkqhkiG9w0BAQsFAASC
-# AYAjmIGJEUMV5g/NMN0AF3tWGEqBHikj5RrlKPnTrZVJOlD3NvxufO/5DWnGd5Zf
-# uZZ3zZHMuUlpnLgf+TCfqzVfcyvj2AydtFFgS/HZZ1oWhPmDU2bvhptAcSBF1Hkx
-# gGAMQQPMzmvS/hNhNb1Mf0mcuYs3Qn3BRrHrrS6jnRDuJwo/QDGsiaayLOlgwrP8
-# 3u7DABreJS5hYFXCcXtvXrUGoqcK1p03hdOWTxTJL1NwewznJbU6ubTge9uLNepQ
-# iEoLIX0KbeZO7CoeomhCBRja2OiKrsL/ed7CUPxBinRPgBsaQkm/lZCA6ewZW1L4
-# HjSjueb6xSer3j9jKBgtLPgg/eRSqjr1KB83KluNjbH4P7DNHWhiCHFSEKWg3xpa
-# 6TZgKeRuQxljeFAzSFBXO3viyQXuE0NDxwOpWz2+4FVAnTVP0MGX/0mErwXWKUQX
-# cHejdB/zN5z8EXktL3FuVN5GWwy0l5a9NyIOTui22wirnsbaK04FUB/szkV1ZJhL
-# 98A=
+# AYAvOafbMfBpAHhLFNBw0PcOjPNyZc0C+miVyYrrAsCVOSOd3NGTqVDQJImrM3Od
+# eGEgBq0zIG/gTk5F+zcv2jSeBjCfBg6Dw0FR3011lNEsA/x9YRdjzX3Oa2OpSpTf
+# 0m4Pf8luR/9ot4ZvTAEd97OiMhvz1Vwe9Tem9EtlKeyGt7ICkNwh1gVFkdxXVFlF
+# AlKrCJzdoSRsppXAelHJfOZrXLFoUIP+A1TFCJ2Ugt2hgRs+dvzmlkTKtQhYmu8y
+# S2dxtNZx/XDzOZ7L6leJry6YIQHRbQQRFEvfaSkyDliBO2PLBufYfeL3X5pdcGVW
+# aOarihx44e4o0iSGybUjFddl7usr1lnE7ktZ76OVc1uSOItpTDWPPxqrrKi5/4lr
+# zYcCSdPTt8YJzMF0T+G9uD7ykyZAw+5t5OY9ZUfHljhHCz+gE0LM35jIJ81yAzYl
+# sJqLRz8YJAlyaVZorCo8SCYvUBKzb2KEGsW0a3T8sYD5CokTt4fJDtFAW9X6HF3x
+# YdQ=
 # SIG # End signature block
